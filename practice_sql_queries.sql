@@ -1,4 +1,5 @@
 -- @@@@@@@ --  
+
 # Create a database 
 CREATE DATABASE IF NOT EXISTS practice_sql;  
 
@@ -30,7 +31,7 @@ truncate table station;
 # Import records to 'station' table from 'station_table_mysql.csv' into your MySQL database using MySQLWorkbench 
 
 
-
+-- @@@@@ --
 
 
 # Assignment SQL
