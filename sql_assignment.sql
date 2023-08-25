@@ -25,4 +25,5 @@ truncate table product_likes;
 
 # Import records to 'product_likes' table from  product_likes_table.csv into your MySQL database using MySQLWorkbench 
 
+# Query to return the ids of product_info that have Zero likes
 select id from product_info where id not in (select prod_id from product_likes);
