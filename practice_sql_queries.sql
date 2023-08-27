@@ -212,3 +212,25 @@ from cinema c1 join cinema c2
     and c1.free = true and c2.free = true
 order by c1.seat_id
 ;
+
+
+#59 Write an SQL query to report the names of all the salespersons who did not have any orders related to the company with the name "RED".
+select name 
+from salesperson 
+where sales_id not in (
+    select sales_id 
+    from orders 
+    where com_id in (
+        select com_id 
+        from Company 
+        where name = "RED"));
+
+#60 Write an SQL query to report for every three line segments whether they can form a triangle.
+select x, y, z, (
+    CASE 
+        WHEN abs(x+y) > abs(z) and abs(y+z) > abs(x) and abs(x+z) > abs(y) THEN 'Yes' 
+        ELSE 'No'
+    END
+) as triangle
+from Triangle
+group by x,y,z
