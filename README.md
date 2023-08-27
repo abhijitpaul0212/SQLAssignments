@@ -1,4 +1,4 @@
-## SQLPractice
+## SQLPractice Q1 to Q100
 
 This repo will contain all the SQL queries related to some assignments or practice/brush ups I will be doing.
 
