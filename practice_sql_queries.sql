@@ -104,3 +104,111 @@ order by author_id asc;
 select ROUND(count(*) / (select count(*) from Delivery) * 100, 2) immediate_percentage
 from Delivery
 where order_date = customer_pref_delivery_date;
+
+
+#20 Write an SQL query to find the ctr of each Ad. Round ctr to two decimal points.
+-- Return the result table ordered by ctr in descending order and by ad_id in ascending order in case of a tie.
+select ad_id, 
+ifnull(
+    round(
+            avg(
+            case 
+                when action = 'Clicked' then 1
+                when action = 'Viewed' then 0
+                else NULL
+            end
+        ) * 100,
+    2),
+0) ctr
+from ads
+group by ad_id
+order by ctr desc;
+
+
+#21 Write an SQL query to find the team size of each of the employees. Return result table in any order.
+select e1.employee_id, count(e2.employee_id) as team_size 
+from `EMPLOYEE` e1
+inner join `EMPLOYEE` e2 on e1.team_id = e2.team_id
+GROUP BY e1.employee_id, e2.team_id;
+
+#22 Write an SQL query to find the type of weather in each country for November 2019. The type of weather is:
+-- ● Cold if the average weather_state is less than or equal 15,
+-- ● Hot if the average weather_state is greater than or equal to 25, and
+-- ● Warm otherwise.
+-- Return result table in any order.
+select ctry.country_name, (
+    CASE 
+        WHEN avg(wthr.weather_state) <= 15 THEN 'Cold'
+        WHEN avg(wthr.weather_state) >= 25 THEN 'Hot'
+        ELSE 'Warm'
+    END
+) as weather_type
+from countries ctry 
+join weather wthr 
+on ctry.country_id = wthr.country_id
+where EXTRACT(YEAR_MONTH from wthr.day) = '201911'
+group by ctry.country_name;
+
+
+# ========== @@@@@@@@ ==========
+
+
+#51 Write an SQL query to report the name, population, and area of the big countries.
+select name, population, area from World where area >= 3000000 or population >= 25000000;
+
+#52 Write an SQL query to report the names of the customer that are not referred by the customer with id = 2.
+-- Return the result table in any order.
+select name from customer where referee_id != 2 or referee_id is Null
+
+#53 Write an SQL query to report all customers who never order anything. Return the result table in any order.
+select name as Customers from Customers where id not in (select customerId from Orders);
+
+#54 Write an SQL query to find the team size of each of the employees.
+select e1.employee_id, count(e2.employee_id) as team_size
+from Employee e1
+inner join Employee e2
+on e1.team_id = e2.team_id
+group by e1.employee_id, e2.team_id
+
+
+#55 Write an SQL query to find the countries where this company can invest
+select c.name as country 
+from Person p 
+inner join Country c 
+on left (p.phone_number,3) = c.country_code 
+inner join (select caller_id as id, duration 
+            from Calls 
+            
+            union all 
+            
+            select callee_id as id, duration 
+            from Calls) phn 
+on p.id = phn.id 
+group by country 
+having avg(duration) > (select avg(duration) from Calls)
+
+
+#56 Write an SQL query to report the device that is first logged in for each player.
+select player_id, device_id from Activity
+group by player_id
+
+#57 Write an SQL query to find the customer_number for the customer who has placed the largest number of orders.
+select customer_number from Orders
+group by customer_number
+order by count(order_number) desc
+limit 1;
+
+#Followup Question: What if more than one customer has the largest number of orders, can you find all the customer_number in this case?
+select customer_number from Orders
+group by customer_number
+order by count(order_number) desc;
+
+
+# 58 Write an SQL query to report all the consecutive available seats in the cinema.
+# Return the result table ordered by seat_id in ascending order.
+select distinct c1.seat_id
+from cinema c1 join cinema c2
+    on abs(c1.seat_id - c2.seat_id) = 1
+    and c1.free = true and c2.free = true
+order by c1.seat_id
+;
